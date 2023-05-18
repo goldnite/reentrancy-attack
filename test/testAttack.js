@@ -27,10 +27,10 @@ describe('Reentrance', function () {
       deployContractsFixture
     );
     const provider = ethers.provider;
-    const [owner, attacker] = accounts;
+    const [owner, attacker, victim] = accounts;
 
     await (
-      await reentrance.connect(attacker).donate(attacker.address, {
+      await reentrance.connect(victim).donate(attacker.address, {
         value: ethers.utils.parseEther('10'),
       })
     ).wait();
