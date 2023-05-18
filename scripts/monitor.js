@@ -26,6 +26,7 @@ async function main() {
     ],
   });
 
+  // fork default hardhat node to sandbox
   // provider.on('block', async (blockNumber) => {
   //   try {
   //     console.log(`resetting sandbox with block #${blockNumber}`);
@@ -34,6 +35,7 @@ async function main() {
   //     console.error(e);
   //   }
   // });
+
   provider.on('pending', async (pendingTxHash) => {
     try {
       const pendingTx = await provider.send('eth_getTransactionByHash', [

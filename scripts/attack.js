@@ -37,7 +37,7 @@ async function main() {
       '1'
     )}`
   );
-  
+
   await (await attack.connect(attacker).withdraw()).wait();
 
   console.log(
