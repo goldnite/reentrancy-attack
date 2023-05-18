@@ -4,14 +4,24 @@ require('dotenv').config();
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: '0.8.18',
+  defaultNetwork: 'localhost',
   networks: {
     sepolia: {
       chainId: 11155111,
       url: `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
       accounts: [process.env.PRIVATE_KEY],
     },
+    hardhat: {
+      mining: {
+        auto: false,
+        interval: 5000,
+      },
+    },
     localhost: {
-      url: 'http://127.0.0.1:8545/',
+      url: 'http://localhost:8545',
+    },
+    sandbox: {
+      url: 'http://localhost:8546',
     },
   },
   etherscan: {

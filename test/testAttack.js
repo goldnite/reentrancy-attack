@@ -9,13 +9,14 @@ const { ethers, waffle } = require('hardhat');
 describe('Reentrance', function () {
   async function deployContractsFixture() {
     const accounts = await ethers.getSigners();
+    const [owner, attacker] = accounts;
 
     const Reentrance = await ethers.getContractFactory('Reentrance');
     const reentrance = await Reentrance.deploy();
     await reentrance.deployed();
 
     const Attack = await ethers.getContractFactory('Attack');
-    const attack = await Attack.deploy(reentrance.address);
+    const attack = await Attack.connect(attacker).deploy(reentrance.address);
     await attack.deployed();
 
     return { accounts, reentrance, attack };
@@ -26,29 +27,29 @@ describe('Reentrance', function () {
       deployContractsFixture
     );
     const provider = ethers.provider;
-    const [owner] = accounts;
+    const [owner, attacker] = accounts;
 
     await (
-      await reentrance.donate(owner.address, {
+      await reentrance.connect(attacker).donate(attacker.address, {
         value: ethers.utils.parseEther('10'),
       })
     ).wait();
 
     await (
-      await reentrance.donate(attack.address, {
+      await reentrance.connect(attacker).donate(attack.address, {
         value: ethers.utils.parseEther('1'),
       })
     ).wait();
 
     await (
-      await owner.sendTransaction({
+      await attacker.sendTransaction({
         to: attack.address,
       })
     ).wait();
 
-    const balanceBefore = await provider.getBalance(owner.address);
-    const txReceipt = await (await attack.withdraw()).wait();
-    const balanceAfter = await provider.getBalance(owner.address);
+    const balanceBefore = await provider.getBalance(attacker.address);
+    const txReceipt = await (await attack.connect(attacker).withdraw()).wait();
+    const balanceAfter = await provider.getBalance(attacker.address);
 
     expect(await provider.getBalance(reentrance.address)).eq(0);
     expect(await provider.getBalance(attack.address)).eq(0);

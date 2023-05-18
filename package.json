@@ -7,7 +7,11 @@
     "dotenv": "^16.0.3",
     "hardhat": "^2.14.0"
   },
-  "dependencies": {
-    "alchemy-sdk": "^2.8.3"
+  "scripts": {
+    "node": "hardhat node",
+    "sandbox": "hardhat node --config ./sandbox.config.js --port 8546",
+    "deploy": "hardhat run scripts/deploy.js",
+    "attack": "hardhat run scripts/attack.js",
+    "monitor": "hardhat run scripts/monitor.js --network sandbox"
   }
 }
