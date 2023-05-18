@@ -12,6 +12,10 @@
     "sandbox": "hardhat node --config ./sandbox.config.js --port 8546",
     "deploy": "hardhat run scripts/deploy.js",
     "attack": "hardhat run scripts/attack.js",
+    "notify": "hardhat run scripts/notify.js",
     "monitor": "hardhat run scripts/monitor.js --network sandbox"
+  },
+  "dependencies": {
+    "nylas": "^6.10.0"
   }
 }
