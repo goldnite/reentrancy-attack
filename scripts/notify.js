@@ -32,7 +32,7 @@ async function main() {
     ).toISOString();
     console.log(`ReentrancyAttack from ${attacker} at ${timestamp}`);
     console.log('Sending an email ...');
-    // await sendMail(attacker, timestamp);
+    await sendMail(attacker, timestamp);
   });
 }
 

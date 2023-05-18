@@ -34,7 +34,6 @@ async function main() {
   //     console.error(e);
   //   }
   // });
-  // hre.tracer.enabled = true;
   provider.on('pending', async (pendingTxHash) => {
     try {
       const pendingTx = await provider.send('eth_getTransactionByHash', [
@@ -51,20 +50,15 @@ async function main() {
         pendingTx.nonce,
       ]);
       const txHash = await sandbox.send('eth_sendTransaction', [pendingTx]);
-      // console.log('hash :>> ', txHash);
-      // const tx = await sandbox.send('eth_getTransactionByHash', [txHash]);
-      // console.log('tx :>> ', tx);
       let txReceipt = null;
       do {
         txReceipt = await sandbox.send('eth_getTransactionReceipt', [txHash]);
       } while (txReceipt === null);
-      // console.log('txReceipt :>> ', txHash);
       const trace = await sandbox.send('debug_traceTransaction', [txHash], {
         disableMemory: true,
         disableStack: true,
         disableStorage: true,
       });
-      // console.log('trace :>> ', trace);
       const withdrawCount = trace.structLogs.filter((log) => {
         if (log.op == 'CALL') {
           return (
