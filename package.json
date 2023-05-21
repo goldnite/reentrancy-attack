@@ -5,7 +5,8 @@
     "@nomiclabs/hardhat-ethers": "^2.2.3",
     "@openzeppelin/contracts": "^4.8.3",
     "dotenv": "^16.0.3",
-    "hardhat": "^2.14.0"
+    "hardhat": "^2.14.0",
+    "nylas": "^6.10.0"
   },
   "scripts": {
     "node": "hardhat node",
@@ -14,8 +15,5 @@
     "attack": "hardhat run scripts/attack.js",
     "notify": "hardhat run scripts/notify.js",
     "monitor": "hardhat run scripts/monitor.js --network sandbox"
-  },
-  "dependencies": {
-    "nylas": "^6.10.0"
   }
 }
