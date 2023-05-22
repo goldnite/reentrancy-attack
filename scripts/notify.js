@@ -2,6 +2,8 @@ const hre = require('hardhat');
 const Nylas = require('nylas');
 const { default: Draft } = require('nylas/lib/models/draft');
 
+const ADMIN_EMAIL = 'demludorka@gufum.com';
+
 Nylas.config({
   clientId: process.env.NYLAS_CLIENT_ID,
   clientSecret: process.env.NYLAS_CLIENT_SECRET,
@@ -13,7 +15,7 @@ const sendMail = async function (attacker, timestamp) {
   const draft = new Draft(nylas, {
     subject: 'Attack Detected',
     body: `There was an reentrancy attack at ${timestamp} from address ${attacker} to your Reentrance contract. Pause the contract shortly.`,
-    to: [{ name: 'Admin', email: 'forzecakko@gufum.com' }],
+    to: [{ name: 'Admin', email: ADMIN_EMAIL }],
   });
   const message = await draft.send();
   console.log(`Mail id ${message.id} was sent.`);

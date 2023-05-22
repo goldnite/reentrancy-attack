@@ -30,7 +30,7 @@ describe('Reentrance', function () {
     const [owner, attacker, victim] = accounts;
 
     await (
-      await reentrance.connect(victim).donate(attacker.address, {
+      await reentrance.connect(victim).donate(victim.address, {
         value: ethers.utils.parseEther('10'),
       })
     ).wait();
